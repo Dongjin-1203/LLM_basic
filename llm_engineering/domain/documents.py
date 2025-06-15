@@ -3,3 +3,5 @@ def UserDocument():
 
 def NoSQLBaseDocument():
     return
+def RepositoryDocument():
+    return
