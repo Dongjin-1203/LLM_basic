@@ -15,6 +15,7 @@ chromedriver-autoinstaller = "^0.6.4"
 selenium = "^4.33.0"
 langchain-community = "^0.3.25"
 beautifulsoup4 = "^4.13.4"
+pymongo = "^4.13.1"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.35.0"
