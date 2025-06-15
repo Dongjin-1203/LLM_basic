@@ -1,22 +1,48 @@
-def CrawlerDispatcher(crawler_name: str, *args, **kwargs):
-    """
-    Dispatcher function to call the appropriate crawler based on the crawler_name.
-    """
-    from llm_engineering.application.crawlers import (
-        arxiv_crawler,
-        github_crawler,
-        google_scholar_crawler,
-        youtube_crawler,
-    )
+# libraries
+import re
+from urllib.parse import urlparse
+from loguru import logger
 
-    crawlers = {
-        "arxiv": arxiv_crawler.ArXivCrawler,
-        "github": github_crawler.GitHubCrawler,
-        "google_scholar": google_scholar_crawler.GoogleScholarCrawler,
-        "youtube": youtube_crawler.YouTubeCrawler,
-    }
+# modules
+from .base import BaseCrawler
+from .custom_article import CustomArticleCrawler
+from .linkedin import LinkedInCrawler
+from .medium import MediumCrawler
+from .github import GithubCrawler
 
-    if crawler_name not in crawlers:
-        raise ValueError(f"Crawler '{crawler_name}' is not supported.")
+class CrawlerDispatcher:
+    def __init__(self) -> "None":
+        self._crawlers = {}
+    
+    def build(cls) -> "CrawlerDispatcher":
+        dispatcher = cls()
 
-    return crawlers[crawler_name](*args, **kwargs)
+        return dispatcher
+    
+    # Medium 크롤러 등록
+    def register_medium(self) -> "CrawlerDispatcher":
+        self.medium = MediumCrawler()
+        return self
+    # LinkedIn 크롤러 등록
+    def register_linkedin(self) -> "CrawlerDispatcher":
+        self.linkedin = LinkedInCrawler()
+        return self
+    # GitHub 크롤러 등록
+    def register_github(self) -> "CrawlerDispatcher":
+        self.github = GithubCrawler()
+        return self
+    
+    def register(self, domain: str, crawler: type[BaseCrawler]) -> "None":
+        parser_domain = urlparse(domain)
+        domain = parser_domain.netloc
+
+        self._crawlers[r"https://(wwww\.)?{}?*".format(re.escape(domain))] = crawler
+
+    def get_crawler(self, url: str) -> BaseCrawler:
+        for pattern, crawler in self._crawlers.items():
+            if re.match(pattern, url):
+                return crawler()
+        else:
+            logger.warning(f"No crawler found for {url}. Defaulting to CustomArticleCrawler. ")
+            
+            return CustomArticleCrawler()
