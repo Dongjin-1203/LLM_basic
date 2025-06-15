@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "module"
+version = "0.1.0"
+description = "LLM 기반 프로젝트"
+authors = ["Dongjin-1203"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.25.1"
+numpy = "^1.21.0"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.35.0"
+pytest = "^8.4.0"
+
+[tool.poe.tasks]
+test = "pytest"
+format = "black ."
+start = "python main.py"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
