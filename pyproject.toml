@@ -1,13 +1,15 @@
 [tool.poetry]
-name = "module"
+name = "llm_engineering"
 version = "0.1.0"
 description = "LLM 기반 프로젝트"
 authors = ["Dongjin-1203"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.13"
 requests = "^2.25.1"
 numpy = "^1.21.0"
+zenml = "^0.83.0"
+loguru = "^0.7.3"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.35.0"
