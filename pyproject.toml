@@ -11,6 +11,8 @@ numpy = "^1.21.0"
 zenml = "^0.83.0"
 loguru = "^0.7.3"
 tqdm = "^4.67.1"
+chromedriver-autoinstaller = "^0.6.4"
+selenium = "^4.33.0"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.35.0"
