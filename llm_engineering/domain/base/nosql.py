@@ -51,3 +51,20 @@ class NoSQLBaseDocument(BaseModel, ABC, Generic[T]):
             if isinstance(value, uuid.UUID):
                 parsed[key] = str(value)
         return parsed
+    
+    # 모델 인스턴스를 MongGoDB에 저장하는 메서드
+    def save(self: T, **kwargs) -> T | None:
+        collection = _database[self.get_collection_name()]
+
+        try:
+            collection.instert_one(self.to_mongo(**kwargs))
+            return self
+        except errors.WriteError:
+            logger.error("MongoDB에 저장할 수 없습니다.")
+        return None
+    
+    @classmethod
+    def get_collection_name(cls: Type[T]) -> str:
+        if not hasattr(cls, "Settings") or not hasattr(cls.Settings, "name"):
+            raise ImproperlyConfigured(f"Document should define a Settings cofiquration class with the name of the collection.")
+        return cls.collection_name
