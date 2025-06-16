@@ -3,6 +3,8 @@ name = "llm_engineering"
 version = "0.1.0"
 description = "LLM 기반 프로젝트"
 authors = ["Dongjin-1203"]
+license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
@@ -22,9 +24,7 @@ poethepoet = "^0.35.0"
 pytest = "^8.4.0"
 
 [tool.poe.tasks]
-test = "pytest"
-format = "black ."
-start = "python main.py"
+run-digital-data-etl-maxime = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_maxime_labonne.yaml"
 
 [build-system]
 requires = ["poetry-core"]
